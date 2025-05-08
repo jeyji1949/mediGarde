@@ -9,9 +9,10 @@ type RootStackParamList = {
 
 const SplashScreen = ({ navigation }: { navigation: StackNavigationProp<RootStackParamList> }) => {
   useEffect(() => {
-    setTimeout(() => {
-      navigation.replace('Onboarding'); 
-    }, 2000); 
+    const timeout = setTimeout(() => {
+      navigation.replace('Onboarding'); // Navigue vers l’onboarding après 2 secondes
+    }, 2000);
+    return () => clearTimeout(timeout);
   }, []);
 
   return (
