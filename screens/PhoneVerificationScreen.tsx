@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image } from 'react-native';
 import CountryPicker, { CountryCode } from 'react-native-country-picker-modal';
 import { useNavigation } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
@@ -22,14 +22,11 @@ export default function PhoneVerificationScreen() {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.logo}>➕</Text>
-      <Text style={styles.title}>mediGarde</Text>
+      <Image source={require('@/assets/images/logo.png')} style={styles.logo} />
       <Text style={styles.subtitle}>Votre pharmacie de garde, toujours à portée de main !</Text>
       <Text style={styles.description}>
         Nous enverrons un message SMS unique. Les tarifs des opérateurs peuvent s’appliquer.
-      </Text>npm uninstall react-async-hook
-
-
+      </Text>
       <View style={styles.phoneInputContainer}>
         <CountryPicker
           countryCode={countryCode}
@@ -63,15 +60,9 @@ const styles = StyleSheet.create({
       alignItems: 'center',
     },
     logo: {
-      fontSize: 50,
-      color: '#66aa88',
       marginBottom: 10,
     },
-    title: {
-      fontSize: 24,
-      fontWeight: 'bold',
-      color: '#333',
-    },
+   
     subtitle: {
       fontSize: 14,
       color: '#666',

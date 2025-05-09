@@ -6,8 +6,9 @@ import { StackNavigationProp } from '@react-navigation/stack';
 // Define the RootStackParamList type
 type RootStackParamList = {
   Onboarding: undefined;
-  OTP: undefined; // Add OTP screen to the navigation stack
+  OTP: undefined;
   Home: undefined;
+  OTPVerificationScreen: undefined;
 };
 
 type OnboardingScreenNavigationProp = StackNavigationProp<RootStackParamList, 'Onboarding'>;
@@ -19,7 +20,7 @@ const OnboardingScreen = ({ navigation }: { navigation: OnboardingScreenNavigati
 
   return (
     <View style={styles.container}>
-      <Image source={require('@/assets/images/logo.png')} style={styles.image} />
+      <Image source={require('@/assets/images/logo.png')} style={styles.logo} />
       <Text style={styles.title}>Trouver une pharmacie près de chez vous</Text>
       <Text style={styles.description}>Il est facile de trouver une pharmacie près de chez vous d'une simple pression.</Text>
       
@@ -42,10 +43,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     paddingHorizontal: 20,
   },
-  image: {
-    width: 200,
-    height: 200,
-    marginBottom: 20,
+  logo: {
+    marginBottom: 10,
   },
   title: {
     fontSize: 20,

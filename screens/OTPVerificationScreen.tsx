@@ -1,7 +1,16 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
+import {Image, View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
+
+type RootStackParamList = {
+  Home: undefined;
+};
+
+type NavigationProp = NativeStackNavigationProp<RootStackParamList, 'Home'>;
 
 export default function OTPVerificationScreen() {
+  const navigation = useNavigation<NavigationProp>();
   const [otp, setOtp] = useState<string[]>(['', '', '', '']);
 
   const handleChange = (index: number, value: string) => {
@@ -14,12 +23,13 @@ export default function OTPVerificationScreen() {
     const fullOtp = otp.join('');
     // TODO: Vérification OTP avec Firebase
     console.log('OTP entered:', fullOtp);
+    // Après vérification réussie, naviguer vers l'écran Home
+    navigation.navigate('Home');
   };
 
   return (
     <View style={styles.container}>
-      <Text style={styles.logo}>➕</Text>
-      <Text style={styles.title}>mediGarde</Text>
+      <Image source={require('@/assets/images/logo.png')} style={styles.logo} />
       <Text style={styles.subtitle}>Votre pharmacie de garde, toujours à portée de main !</Text>
       <Text style={styles.description}>
         Soumettez le code à 4 chiffres que vous avez obtenu sur le numéro qui vous a été fourni.
@@ -55,15 +65,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   logo: {
-    fontSize: 50,
-    color: '#66aa88',
+  
     marginBottom: 10,
   },
-  title: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    color: '#333',
-  },
+  
   subtitle: {
     fontSize: 14,
     color: '#666',
