@@ -2,6 +2,12 @@ import React, { useState } from 'react';
 import {Image, View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import axios from 'axios';
+import { useRoute } from '@react-navigation/native';
+
+const route = useRoute<any>();
+const phone = route.params?.phone;
+console.log('Phone number:', phone);
 
 type RootStackParamList = {
   Home: undefined;
@@ -19,14 +25,25 @@ export default function OTPVerificationScreen() {
     setOtp(newOtp);
   };
 
-  const handleVerify = () => {
-    const fullOtp = otp.join('');
-    // TODO: Vérification OTP avec Firebase
-    console.log('OTP entered:', fullOtp);
-    // Après vérification réussie, naviguer vers l'écran Home
-    navigation.navigate('Home');
-  };
+  const handleVerify = async () => {
+  const fullOtp = otp.join('');
 
+  try {
+    const res = await axios.post('http://localhost:5000/api/auth/verify-otp', {
+      phone,
+      otp: fullOtp
+    });
+
+    if (res.data.success) {
+      navigation.navigate('Home');
+    } else {
+      alert('OTP incorrect');
+    }
+  } catch (error) {
+    console.error('Erreur vérification OTP:', error);
+  }
+};
+  console.log('OTP:', otp);
   return (
     <View style={styles.container}>
       <Image source={require('@/assets/images/logo.png')} style={styles.logo} />

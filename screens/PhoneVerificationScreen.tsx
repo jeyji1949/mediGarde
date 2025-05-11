@@ -3,9 +3,10 @@ import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image } from 'reac
 import CountryPicker, { CountryCode } from 'react-native-country-picker-modal';
 import { useNavigation } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import axios from 'axios';
 
 type RootStackParamList = {
-  OTPVerificationScreen: undefined;
+  OTPVerificationScreen: { phone: string };
 };
 
 type NavigationProp = NativeStackNavigationProp<RootStackParamList, 'OTPVerificationScreen'>;
@@ -15,11 +16,18 @@ export default function PhoneVerificationScreen() {
   const [countryCode, setCountryCode] = useState<CountryCode>('MA');
   const [phoneNumber, setPhoneNumber] = useState<string>('');
 
-  const handleSend = () => {
-    // TODO: Envoi de l'OTP avec Firebase
-    navigation.navigate('OTPVerificationScreen');
-  };
-
+ const handleSend = async () => {
+  try {
+    await axios.post('http://localhost:5000/api/auth/send-otp', {
+      phone: `+212${phoneNumber}` // ou récupère country code + numéro
+    });
+    navigation.navigate('OTPVerificationScreen', {
+      phone: `+212${phoneNumber}` // passe-le à l’écran suivant
+    });
+  } catch (error) {
+    console.error('Erreur OTP:', error);
+  }
+};
   return (
     <View style={styles.container}>
       <Image source={require('@/assets/images/logo.png')} style={styles.logo} />

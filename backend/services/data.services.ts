@@ -1,5 +1,6 @@
 import * as Location from 'expo-location';
-import { getDistance } from 'geolib'; // Assurez-vous d'installer geolib avec npm install geolib
+import { getDistance } from 'geolib';
+
 // Typing des données des pharmacies et des médecins
 export type Pharmacy = {
   id: number;
@@ -15,7 +16,7 @@ export type Pharmacy = {
   distance?: number;
 }
 
- export interface Doctor {
+export interface Doctor {
   id: number;
   name: string;
   specialties: string[];
@@ -47,9 +48,44 @@ class ApiService {
     }
   }
 
+  // Adapter les données JSON aux types définis
+  private adaptJsonPharmacies(pharmacies: any[]): Pharmacy[] {
+    return pharmacies.map(pharmacy => ({
+      id: pharmacy.id,
+      name: pharmacy.name,
+      address: pharmacy.address,
+      isOpen: true, // Par défaut, nous supposons que c'est ouvert
+      latitude: pharmacy.lat,
+      longitude: pharmacy.lng,
+      rating: pharmacy.rating || 0,
+      reviewCount: 0, // Par défaut
+      specialties: ['Garde ouverte'], // Par défaut
+      imageUrl: null
+    }));
+  }
+
+  private adaptJsonDoctors(doctors: any[]): Doctor[] {
+    return doctors.map(doctor => ({
+      id: doctor.id,
+      name: doctor.name,
+      address: doctor.address,
+      isAvailable: true, // Par défaut, nous supposons que c'est disponible
+      latitude: doctor.lat,
+      longitude: doctor.lng,
+      rating: doctor.rating || 0,
+      reviewCount: 0, // Par défaut
+      specialties: ['Généraliste'], // Par défaut
+      imageUrl: null
+    }));
+  }
+
   // Récupération des pharmacies avec le rayon et les données fictives
   async getPharmacies(latitude: number, longitude: number, radius: number = 5000): Promise<Pharmacy[]> {
     try {
+      // Dans un environnement de production, vous feriez un appel API ici
+      // Mais pour le développement, nous utilisons des données fictives
+      
+      // Option 1: Utiliser les données mockées du service
       const mockPharmacies: Pharmacy[] = [
         {
           id: 1,
@@ -97,6 +133,31 @@ class ApiService {
           rating: 4.9,
           reviewCount: 32,
           specialties: ['Garde ouverte', 'Pédiatrie'],
+          imageUrl: null
+        },
+        // Ajouter les pharmacies du JSON
+        {
+          id: 5,
+          name: 'Pharmacie Ibn Sina',
+          address: 'Rue Hassan II, Rabat',
+          isOpen: true,
+          latitude: 34.020882,
+          longitude: -6.841650,
+          rating: 4.8,
+          reviewCount: 25,
+          specialties: ['Garde ouverte'],
+          imageUrl: null
+        },
+        {
+          id: 6,
+          name: 'Pharmacie Al Amal',
+          address: 'Avenue Mohamed V, Rabat',
+          isOpen: true,
+          latitude: 34.022500,
+          longitude: -6.839000,
+          rating: 4.6,
+          reviewCount: 20,
+          specialties: ['Garde ouverte'],
           imageUrl: null
         }
       ];
@@ -170,6 +231,18 @@ class ApiService {
           longitude: longitude - 0.002,
           rating: 4.5,
           reviewCount: 15,
+          imageUrl: null
+        },
+        // Ajouter les médecins du JSON
+        {
+          id: 5,
+          name: 'docteur Ibn Sina',
+          specialties: ['Généraliste'],
+          isAvailable: true,
+          latitude: 34.020882,
+          longitude: -6.841650,
+          rating: 4.5,
+          reviewCount: 18,
           imageUrl: null
         }
       ];
